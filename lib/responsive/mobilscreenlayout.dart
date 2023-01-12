@@ -1,6 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/utils/color.dart';
+import 'package:instagram_flutter/utils/global_variable.dart';
+// import 'package:instagram_flutter/providers/user_provider.dart';
+// import 'package:provider/provider.dart';
+// import 'package:instagram_flutter/models/user.dart' as model;
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -13,12 +19,12 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   // String username = " ";
 //   @override
 //   void initState() {
- //   // TODO: implement initState
+  //   // TODO: implement initState
 //     super.initState();
 //     // creating a method
 //     getUsername();
 //   }
-// // it is our one time read   start point 
+// // it is our one time read   start point
 //   // creating a function
 //   void getUsername() async {
 //     // method to get the data from the firestore .
@@ -31,11 +37,88 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 //       username = (snap.data() as Map<String,dynamic> ) ['username'];
 //     });
 //   }
-// one time read ended here  
+// one time read ended here
+  int _page = 0;
+  late PageController pageController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void navigationTapped(int page) {
+    pageController.jumpToPage(page);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    //  model.User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      body: Center(child: Text('This is mobil')),
+      body: PageView(
+        children: homeScreenItems,
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        onPageChanged: onPageChanged,
+      ),
+      bottomNavigationBar: CupertinoTabBar
+          // istead of cuoertino we can use bottom navigation bar widget//
+          // ignore: prefer_const_literals_to_create_immutables
+          (
+        backgroundColor: mobileBackgroundColor,
+        // we will use conditional rendering for the icon color when it is selected .//
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                color: _page == 0 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search,
+                color: _page == 1 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.add_circle,
+                color: _page == 2 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.favorite,
+                color: _page == 3 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: _page == 4 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+        ],
+        onTap: navigationTapped,
+      ),
     );
   }
 }

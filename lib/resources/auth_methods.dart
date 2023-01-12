@@ -10,6 +10,14 @@ import 'package:instagram_flutter/resources/storage_method.dart';
 class Authmethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+// method for storing data using state managemnet
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap =
+        await _firestore.collection('users').doc(currentUser.uid).get();
+    return model.User.fromSnap(snap);
+  }
 
   // sign up user
   Future<String> signUpUser({
@@ -38,17 +46,18 @@ class Authmethods {
         // Add user to our database
 
         model.User user = model.User(
-
- username: username,
+          username: username,
           uid: cred.user!.uid,
           email: email,
           bio: bio,
           followers: [],
           following: [],
           photoUrl: photoUrl,
-
         );
-        await _firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
+        await _firestore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.toJson());
 //
         // await _firestore.collection('users').add({
         //    'username': username,
