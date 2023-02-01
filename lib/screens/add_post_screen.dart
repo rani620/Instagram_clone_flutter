@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_flutter/models/user.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/utils/color.dart';
 import 'package:instagram_flutter/utils/utils.dart';
@@ -16,8 +17,21 @@ class AddPostScreen extends StatefulWidget {
 
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
+  final TextEditingController _descriptionController = TextEditingController();
+  void PostImage(String uid,
+  String username,
+  String ProfImage,
+  ){
+   try {
 
-  _selectImage(BuildContext) async {
+   }catch(e){
+    
+   }
+  }
+
+
+
+   _selectImage(BuildContext) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -47,6 +61,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     _file = file;
                   });
                 },
+              ),
+              SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Cancel'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                },
               )
             ],
           );
@@ -54,12 +75,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // final User user = Provider.of<UserProvider>(context).getUser;
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _descriptionController.dispose();
+  }
 
-    // final User user = Provider.of<UserProvider>(context).getUser;
+  @override
+  Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
-     
+
     return _file == null
         ? Center(
             child: IconButton(
@@ -78,7 +103,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed:(){},
+                  // postImage,
                   child: const Text(
                     'Post',
                     style: TextStyle(
@@ -91,16 +117,19 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ],
             ),
             body: Column(children: [
-              Row(
+              Row(                   
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/rani.png'),
+                children: [    
+                  CircleAvatar(        
+                    backgroundImage: NetworkImage(user.photoUrl),
+
+                    // AssetImage('assets/rani.png'),
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.45,
                     child: TextField(
+                      controller: _descriptionController,
                       decoration: const InputDecoration(
                         hintText: 'write a caption....',
                         border: InputBorder.none,
@@ -113,10 +142,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     width: 45,
                     child: AspectRatio(
                       aspectRatio: 487 / 451,
-                      child: Container(
+                      child: Container(  
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                          image: AssetImage('assets/rani.png'),
+                          image: MemoryImage(_file!),
                           fit: BoxFit.fill,
                           alignment: FractionalOffset.topCenter,
                         )),
