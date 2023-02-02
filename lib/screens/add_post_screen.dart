@@ -18,20 +18,18 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   Uint8List? _file;
   final TextEditingController _descriptionController = TextEditingController();
-  void PostImage(String uid,
-  String username,
-  String ProfImage,
-  ){
-   try {
+  // void PostImage(String uid,
+  // String username,
+  // String ProfImage,
+  // ){
+  //  try {
 
-   }catch(e){
-    
-   }
-  }
+  //  }catch(e){
 
+  //  }
+  // }
 
-
-   _selectImage(BuildContext) async {
+  _selectImage(BuildContext) async {
     return showDialog(
         context: context,
         builder: (context) {
@@ -83,13 +81,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = Provider.of<UserProvider>(context).getUser;
+    final User? user = Provider.of<UserProvider>(context).getUser;
 
     return _file == null
         ? Center(
             child: IconButton(
               icon: const Icon(Icons.upload),
-              onPressed: () => _selectImage(context),
+              onPressed: () =>
+                  //  print("Clicked")
+                  _selectImage(context),
             ),
           )
         : Scaffold(
@@ -103,8 +103,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
               centerTitle: false,
               actions: [
                 TextButton(
-                  onPressed:(){},
-                  // postImage,
+                  onPressed: () {},
+                  // PostImage,
                   child: const Text(
                     'Post',
                     style: TextStyle(
@@ -117,12 +117,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ],
             ),
             body: Column(children: [
-              Row(                   
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [    
-                  CircleAvatar(        
-                    backgroundImage: NetworkImage(user.photoUrl),
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(user?.photoUrl ?? "No photo"),
 
                     // AssetImage('assets/rani.png'),
                   ),
@@ -142,7 +142,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                     width: 45,
                     child: AspectRatio(
                       aspectRatio: 487 / 451,
-                      child: Container(  
+                      child: Container(
                         decoration: BoxDecoration(
                             image: DecorationImage(
                           image: MemoryImage(_file!),
